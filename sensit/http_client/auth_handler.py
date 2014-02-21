@@ -1,8 +1,7 @@
 # AuthHandler takes care of devising the auth type and using it
 class AuthHandler():
 
-	URL_SECRET = 2
-	URL_TOKEN = 3
+	HTTP_HEADER = 1
 
 	def __init__(self, auth):
 		self.auth = auth
@@ -10,11 +9,8 @@ class AuthHandler():
 	# Calculating the Authentication Type
 	def get_auth_type(self):
 
-		if 'client_id' in self.auth and 'client_secret' in self.auth:
-			return self.URL_SECRET
-
-		if 'access_token' in self.auth:
-			return self.URL_TOKEN
+		if 'http_header' in self.auth:
+			return self.HTTP_HEADER
 
 		return -1
 
@@ -25,12 +21,8 @@ class AuthHandler():
 		auth = self.get_auth_type()
 		flag = False
 
-		if auth == self.URL_SECRET:
-			request = self.url_secret(request)
-			flag = True
-
-		if auth == self.URL_TOKEN:
-			request = self.url_token(request)
+		if auth == self.HTTP_HEADER:
+			request = self.http_header(request)
 			flag = True
 
 		if not flag:
@@ -38,14 +30,8 @@ class AuthHandler():
 
 		return request
 
-	# OAUTH2 Authorization with client secret
-	def url_secret(self, request):
-		request['params']['client_id'] = self.auth['client_id']
-		request['params']['client_secret'] = self.auth['client_secret']
-		return request
-
-	# OAUTH2 Authorization with access token
-	def url_token(self, request):
-		request['params']['access_token'] = self.auth['access_token']
+	# Authorization with HTTP header
+	def http_header(self, request):
+		request['headers']['Authorization'] = 'Bearer ' + self.auth['http_header']
 		return request
 

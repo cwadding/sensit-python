@@ -32,10 +32,10 @@ class Feed():
 	# Create a feed on a given topic. Requires authorization of **read_any_data**, or **read_application_data**.
 	# '/topics/:topic_id/feeds' POST
 	#
-	# data - A hash of data to be stored
-	def create(self, data, options = {}):
+	# feed - A Hash containing `at`: a formatted time of the event. Defaults to the current time if not present.`tz`: The time zone of the time given in `at`. Defaults to UTC`data`:A hash of data to be stored
+	def create(self, feed, options = {}):
 		body = options['body'] if 'body' in options else {}
-		body['data'] = data
+		body['feed'] = feed
 
 		response = self.client.post('/topics/' + self.topic_id + '/feeds', body, options)
 
@@ -44,10 +44,10 @@ class Feed():
 	# Update an associated Feed to the Topic. Requires authorization of **read_any_data**, or **read_application_data**.
 	# '/topics/:topic_id/feeds/:id' PUT
 	#
-	# data - A hash of data to be stored
-	def update(self, data, options = {}):
+	# feed - A hash containing `data`:A hash of data to be stored
+	def update(self, feed, options = {}):
 		body = options['body'] if 'body' in options else {}
-		body['data'] = data
+		body['feed'] = feed
 
 		response = self.client.put('/topics/' + self.topic_id + '/feeds/' + self.id + '', body, options)
 

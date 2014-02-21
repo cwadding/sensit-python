@@ -18,11 +18,10 @@ class HttpClient():
 	def __init__(self, auth, options):
 
 		if isinstance(auth, str):
-			auth = { 'access_token': auth }
+			auth = { 'http_header': auth }
 
 		self.options = {
 			'base': 'http://sensit.herokuapp.com/api',
-			'api_version': '1',
 			'user_agent': 'alpaca/0.2.0 (https://github.com/pksunkara/alpaca)'
 		}
 

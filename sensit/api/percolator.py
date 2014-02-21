@@ -32,12 +32,10 @@ class Percolator():
 	# Create a percolator on the associated Topic with the specified name and query. Requires authorization of **manage_any_percolators**, or **manage_application_percolators**.
 	# '/topics/:topic_id/percolators' POST
 	#
-	# name - The time zone of the time. Defaults to UTC
-	# query - A hash of data to be stored
-	def create(self, name, query, options = {}):
+	# percolator - A Hash containing `name`: The name of the percolator(required).`query`: The query hash according to the according the the [elasticsearch Query DSL](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl.html)
+	def create(self, percolator, options = {}):
 		body = options['body'] if 'body' in options else {}
-		body['name'] = name
-		body['query'] = query
+		body['percolator'] = percolator
 
 		response = self.client.post('/topics/' + self.topic_id + '/percolators', body, options)
 
@@ -46,10 +44,10 @@ class Percolator():
 	# Update the query for a specific percolator. Requires authorization of **manage_any_percolators**, or **manage_application_percolators**.
 	# '/topics/:topic_id/percolators/:id' PUT
 	#
-	# query - A hash of data to be stored
-	def update(self, query, options = {}):
+	# percolator - A Hash containing the `query` hash according to the according the the [elasticsearch Query DSL](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl.html)
+	def update(self, percolator, options = {}):
 		body = options['body'] if 'body' in options else {}
-		body['query'] = query
+		body['percolator'] = percolator
 
 		response = self.client.put('/topics/' + self.topic_id + '/percolators/' + self.id + '', body, options)
 

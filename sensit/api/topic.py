@@ -28,10 +28,10 @@ class Topic():
 	# Requires authorization of **manage_any_data**, or **manage_application_data**.
 	# '/topics' POST
 	#
-	# name - The name and id of the topic.
-	def create(self, name, options = {}):
+	# topic - A hash containing the name/id of the topic (required) and a description of the topic.
+	def create(self, topic, options = {}):
 		body = options['body'] if 'body' in options else {}
-		body['name'] = name
+		body['topic'] = topic
 
 		response = self.client.post('/topics', body, options)
 
@@ -40,10 +40,10 @@ class Topic():
 	# Requires authorization of **manage_any_data**, or **manage_application_data**.
 	# '/topics/:id' PUT
 	#
-	# name - The name and id of the topic.
-	def update(self, name, options = {}):
+	# topic - A hash containing the name/id of the topic (required) and a description of the topic.
+	def update(self, topic, options = {}):
 		body = options['body'] if 'body' in options else {}
-		body['name'] = name
+		body['topic'] = topic
 
 		response = self.client.put('/topics/:id', body, options)
 

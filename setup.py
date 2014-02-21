@@ -8,7 +8,7 @@ except ImportError:
 
 setup(
 	name='sensit-client',
-	version='0.0.1',
+	version='0.0.2',
 	description='Official Sensit API library client for python',
 	author='Christopher Waddington',
 	author_email='cwadding@gmail.com',

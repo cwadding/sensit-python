@@ -30,14 +30,10 @@ class Subscription():
 	# Create a subscription which will connect to the server and listen for feed data for any of the associated topics. Requires authorization of **manage_any_subscriptions**, or **manage_application_subscriptions**.
 	# '/subscriptions' POST
 	#
-	# name - The channel or name to identify the subscription.
-	# host - The ip address or host of the connection
-	# protocol - the protocol to comminivate over
-	def create(self, name, host, protocol, options = {}):
+	# subscription - A Hash containing`name`:The channel or name to identify the subscription(required).`host`:The ip address or host of the connection(required).`protocol`:the protocol to communicate over (http, tcp, udp, mqtt) (required)`port`:The port of the connection.
+	def create(self, subscription, options = {}):
 		body = options['body'] if 'body' in options else {}
-		body['name'] = name
-		body['host'] = host
-		body['protocol'] = protocol
+		body['subscription'] = subscription
 
 		response = self.client.post('/subscriptions', body, options)
 
@@ -46,14 +42,10 @@ class Subscription():
 	# Returns an object with the current configuration that Buffer is using, including supported services, their icons and the varying limits of character and schedules.  Requires authorization of **manage_any_subscriptions**, or **manage_application_subscriptions**.
 	# '/subscriptions/:id' PUT
 	#
-	# name - The channel or name to identify the subscription.
-	# host - The ip address or host of the connection
-	# protocol - the protocol to comminivate over
-	def update(self, name, host, protocol, options = {}):
+	# subscription - A Hash containing`name`:The channel or name to identify the subscription(required).`host`:The ip address or host of the connection(required).`protocol`:the protocol to communicate over (http, tcp, udp, mqtt) (required)`port`:The port of the connection.
+	def update(self, subscription, options = {}):
 		body = options['body'] if 'body' in options else {}
-		body['name'] = name
-		body['host'] = host
-		body['protocol'] = protocol
+		body['subscription'] = subscription
 
 		response = self.client.put('/subscriptions/' + self.id + '', body, options)
 
