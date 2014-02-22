@@ -1,19 +1,34 @@
 from .http_client import HttpClient
 
 # Assign all the api classes
+from .api.percolator import Percolator
+from .api.report import Report
 from .api.user import User
 from .api.topic import Topic
 from .api.feed import Feed
 from .api.data import Data
-from .api.percolator import Percolator
-from .api.report import Report
 from .api.subscription import Subscription
 from .api.field import Field
+from .api.publication import Publication
 
 class Client():
 
 	def __init__(self, auth = {}, options = {}):
 		self.http_client = HttpClient(auth, options)
+
+	# A **Percolator** is a reverse query much like a match rule which is run whenever a new feed is added. These can be used to create alerts by causing the sensit to publish the feed that was just added. A percolator query is defined by a `name` and and valid `query` according to the according the the [elasticsearch Query DSL](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl.html).  For more information about Percolator queries please refer to the [elasticsearch percolator documentation](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-percolate.html).
+	#
+	# topic_id - The key for the parent topic
+	# id - The name of the percolator query
+	def percolator(self, topic_id, id):
+		return Percolator(topic_id, id, self.http_client)
+
+	# Reports are stored filter and facet queries on the **Feed** data. A report is a assigned a `name` and the `query` is any elasticsearch query which filters only the desired data for the facets (See the [elasticsearch Query DSL](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-queries.html) for valid queries). A report can have many `facets` with each facet is referred to by a user defined `name`. Valid `type`'s of facet include **terms**, **range**, **histogram**, **filter**, **statistical**, **query**, **terms_stats**, or **geo_distance**. The `query` within a facet defines the field counts or statistics which the data is calculated over. See the [elasticsearch facet dsl](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-facets.html) for information about the various facet types and valid query fields.
+	#
+	# topic_id - The key for the parent topic
+	# id - The identifier of the report
+	def report(self, topic_id, id):
+		return Report(topic_id, id, self.http_client)
 
 	# <no value>
 	#
@@ -40,20 +55,6 @@ class Client():
 	def data(self, topic_id, feed_id, id):
 		return Data(topic_id, feed_id, id, self.http_client)
 
-	# A **Percolator** is a reverse query much like a match rule which is run whenever a new feed is added. These can be used to create alerts by causing the sensit to publish the feed that was just added. A percolator query is defined by a `name` and and valid `query` according to the according the the [elasticsearch Query DSL](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl.html).  For more information about Percolator queries please refer to the [elasticsearch percolator documentation](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-percolate.html).
-	#
-	# topic_id - The key for the parent topic
-	# id - The name of the percolator query
-	def percolator(self, topic_id, id):
-		return Percolator(topic_id, id, self.http_client)
-
-	# Reports are stored filter and facet queries on the **Feed** data. A report is a assigned a `name` and the `query` is any elasticsearch query which filters only the desired data for the facets (See the [elasticsearch Query DSL](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-queries.html) for valid queries). A report can have many `facets` with each facet is referred to by a user defined `name`. Valid `type`'s of facet include **terms**, **range**, **histogram**, **filter**, **statistical**, **query**, **terms_stats**, or **geo_distance**. The `query` within a facet defines the field counts or statistics which the data is calculated over. See the [elasticsearch facet dsl](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-facets.html) for information about the various facet types and valid query fields.
-	#
-	# topic_id - The key for the parent topic
-	# id - The identifier of the report
-	def report(self, topic_id, id):
-		return Report(topic_id, id, self.http_client)
-
 	# Subscriptions allows feed data to imported using a socket rather than just using the Feed REST API. By creating a subscription sensit will start to listen for feed data being imported using the specified `host` and while using the topic name as the `channel` name.
 	#
 	# id - The identifier for the subscription
@@ -66,4 +67,11 @@ class Client():
 	# id - Username of the user
 	def field(self, topic_id, id):
 		return Field(topic_id, id, self.http_client)
+
+	# Publications are stored actions which are taken when a feed is created, updated, deleted, or there is a matching percolator query.
+	#
+	# topic_id - The key for the parent topic
+	# id - The identifier of the publication
+	def publication(self, topic_id, id):
+		return Publication(topic_id, id, self.http_client)
 
